@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-dark-roast text-primary font-sans antialiased overflow-x-hidden;
+  }
+  
+  html {
+    scroll-behavior: auto; /* Handled by Lenis */
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-warm-cream/5 backdrop-blur-glass border border-warm-cream/10 shadow-glass rounded-[24px];
+  }
+  
+  .glass-panel-hover {
+    @apply transition-all duration-300 hover:bg-warm-cream/10 hover:border-warm-cream/20 hover:shadow-glass-hover hover:-translate-y-1;
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-amber-glow via-terracotta to-amber-glow;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-dark-roast;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-cafe-brown rounded-full border border-warm-cream/10;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-amber-glow/50;
+}
