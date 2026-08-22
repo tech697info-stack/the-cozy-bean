@@ -6,19 +6,39 @@ import SectionTitle from '../ui/SectionTitle';
 import GlowButton from '../ui/GlowButton';
 import { CheckCircle } from 'lucide-react';
 import { useForm as useReactHookForm } from 'react-hook-form';
+import { supabase } from '../../lib/supabaseClient';
 
 const ReservationForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
   
   const { register, handleSubmit, formState: { errors }, reset } = useReactHookForm();
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    console.log(data);
+    setSubmitError(null);
+
+    const { error } = await supabase.from('reservations').insert([
+      {
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        reservation_date: data.date,
+        reservation_time: data.time,
+        guests: data.guests,
+        message: data.message || null,
+      },
+    ]);
+
     setIsSubmitting(false);
+
+    if (error) {
+      console.error('Reservation submit failed:', error);
+      setSubmitError("Something went wrong. Please try again in a moment.");
+      return;
+    }
+
     setIsSuccess(true);
     reset();
     
@@ -170,6 +190,10 @@ const ReservationForm = () => {
                     {...register("message")}
                   ></textarea>
                 </div>
+
+                {submitError && (
+                  <p className="text-red-400 text-sm text-center">{submitError}</p>
+                )}
 
                 <GlowButton type="submit" className="w-full" variant="primary">
                   {isSubmitting ? (
